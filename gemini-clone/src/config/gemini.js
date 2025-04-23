@@ -1,11 +1,11 @@
 // node --version # Should be >= 18.0.0
 // npm install @google/generative-ai
 
-const {
+import {
     GoogleGenerativeAI,
     HarmCategory,
     HarmBlockThreshold,
-} = require("@google/generative-ai");
+} from "@google/generative-ai"
 
 const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = "AIzaSyCl2X32z0iuwXOmWnSrbTxXZpm_zmvkWCA";
@@ -20,25 +20,37 @@ async function runChat(prompt){
         topP: 1,
         maxOutputTokens: 2048,
     };
-}
-[
-{
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-},
-{
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-},
-{
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-},
-{
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-},
-];
+
+    const safetySettings = [
+        {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+    ];
 
 const chat = model.startChat({
+    generationConfig,
+    safetySettings,
+    history:[
+    ],
+  });
+
+  const result = await chat.sendMessage(prompt);
+  const response = result.response;
+  console.log(response.text());
+}
+
+export default runChat;
     
